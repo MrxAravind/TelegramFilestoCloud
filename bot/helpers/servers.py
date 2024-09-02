@@ -153,4 +153,4 @@ async def flashbang(response):
     return f"https://flashbang.sh/f/{response}"
 
 async def tgraph(response):
-    return f"https://graph.org{response["src"]}"
+    return f"https://graph.org{response['src']}"
