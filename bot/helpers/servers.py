@@ -88,7 +88,7 @@ async def upload_handler(client: CloudBot, message: CallbackQuery, callback_data
                     response = pixeldrain.Sync.upload_file(file_path,returns="dict", filename=file_name, api_key=PIXELDRAIN_APIKEY)
                     link = await pixeldrain_com(response)
                 elif callback_data.endswith('flashbang'):
-                    url = f'https://w.flashbang.sh/t/{file_path.split('/')[-1][-10:-1]}'
+                    url = f'https://w.flashbang.sh/t/{file_path.split("/")[-1][-10:-1]}'
                     response = await server_upload(file_path=file_path, url=url,message=status,size=fize,start=start,put=True)
                     link = await flashbang(response)
                 elif callback_data.endswith('switch'):
