@@ -12,8 +12,11 @@ import urllib.parse
 import asyncio
 
 
+# Set up the basic configuration for the logger
+logging.basicConfig(level=logging.INFO)
 
-logger = LOGGER(__name__)
+# Create a logger object
+logger = logging.getLogger(__name__)
 
 
 
