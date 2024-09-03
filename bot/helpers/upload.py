@@ -5,30 +5,27 @@ from aiohttp import client_exceptions
 import asyncio
 from .progress import progress_for_pyrogram
 from swibots import BotApp
-from config import TOKEN,COMMUNITY_ID,GROUP_ID
+from config import TOKEN, COMMUNITY_ID, GROUP_ID
 
 logger = LOGGER(__name__)
 
-client_exceptions = (
-    aiohttp.ClientResponseError,
-    aiohttp.ClientConnectionError,
-    aiohttp.ClientPayloadError,
-)
-
-#Switch
+# Initialize the bot
 bot = BotApp(TOKEN)
 
+# Progress callback function
+async def progress_callback(bytes_sent, total_bytes, message, start):
+    await progress_for_pyrogram(bytes_sent, total_bytes, message, start)
 
-async def progress_callback(bytes_sent, total_bytes,message,start):
-    await progress_for_pyrogram(bytes_sent,total_bytes,message,start)
+# Upload progress handler
+async def upload_progress_handler(progress, total, message, start):
+    await progress_for_pyrogram(progress.current, total, message, start)
 
-async def upload_progress_handler(progress,total,message,start):
-    await progress_for_pyrogram(progress.current,total,message,start)
-
-
-async def server_upload(url: str,file_path: str,message,size,start,put=None):
+# Server upload function
+async def server_upload(url: str, file_path: str, message, size, start, put=None):
     if not os.path.isfile(file_path):
         raise Exception("File path not found")
+
+    # Progress reader
     async def progress_reader(file, chunk_size=8192):
         total_size = os.path.getsize(file.name)
         bytes_read = 0
@@ -38,7 +35,7 @@ async def server_upload(url: str,file_path: str,message,size,start,put=None):
                 break
             bytes_read += len(chunk)
             if progress_callback:
-                await progress_callback(bytes_read,total_size,message,start)
+                await progress_callback(bytes_read, total_size, message, start)
             yield chunk
 
     try:
@@ -53,24 +50,23 @@ async def server_upload(url: str,file_path: str,message,size,start,put=None):
                 if response.headers.get('Content-Type', '').startswith('application/json'):
                     return await response.json()
                 return await response.text()
-    except client_exceptions.ClientError as e:
+    except aiohttp.ClientError as e:  # Catching all client-related errors
         raise Exception(e)
 
-
-
-async def switch_upload(file_path,size,message,start):
-    if os.path.isfile(file_path) is False:
+# Switch upload function
+async def switch_upload(file_path, size, message, start):
+    if not os.path.isfile(file_path):
         raise Exception("File path not found")
     try:
         res = await bot.send_media(
-             message=f"{os.path.basename(file_path)}",
-             community_id=COMMUNITY_ID,
-             group_id=GROUP_ID,
-             document=file_path,
-             description=file_path,
-             progress= upload_progress_handler,
-             progress_args=(size,message,start))
+            message=f"{os.path.basename(file_path)}",
+            community_id=COMMUNITY_ID,
+            group_id=GROUP_ID,
+            document=file_path,
+            description=file_path,
+            progress=upload_progress_handler,
+            progress_args=(size, message, start)
+        )
         return res
     except Exception as e:
         raise Exception(e)
-    
