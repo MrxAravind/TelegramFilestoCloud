@@ -94,10 +94,8 @@ async def upload_handler(client: CloudBot, message: CallbackQuery, callback_data
                 elif callback_data.endswith('switch'):
                     response = await switch_upload(file_path=file_path,size=fize,message=status,start=start)
                     link = response.media_link
-                    link = f"{shorten_link(link)}"
-                    logger.info(response.media_link)
-                    logger.info(link)
-                elif callback_data.endswith('telegraph'):
+                    link = f"{shorten_link(link)}\nFull_Url: {link}"
+                    elif callback_data.endswith('telegraph'):
                         try:
                           telegraph = Telegraph()
                           telegraph.create_account(short_name='SpidyTelegramFiletoCloudBot')
