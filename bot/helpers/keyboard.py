@@ -33,12 +33,6 @@ def server_select(file_size: int,Photo=None):
                 callback_data=f"{prefix}pixeldrain"
             )
         ],
-        [
-            InlineKeyboardButton(
-                "Switch",
-                callback_data=f"{prefix}switch"
-            )
-        ],
     ]
     if file_size < 2e+8:
         # 2e+8 is 200000000.0
@@ -60,6 +54,13 @@ def server_select(file_size: int,Photo=None):
             InlineKeyboardButton(
                 "FlashBang",
                 callback_data=f"{prefix}flashbang"
+            )
+        ])
+    if False:
+                upload_selection.append([
+            InlineKeyboardButton(
+                "Switch",
+                callback_data=f"{prefix}switch"
             )
         ])
     

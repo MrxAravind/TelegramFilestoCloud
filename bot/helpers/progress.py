@@ -80,5 +80,5 @@ async def progress_for_pyrogram(current, total, message, start):
             await message.edit(
                 text=f"{tmp}")                                               
         except Exception as e:
-             logger.info(e)
+             print(e)
              raise Exception(e)

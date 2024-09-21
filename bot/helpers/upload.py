@@ -63,7 +63,6 @@ async def switch_upload(file_path, size, message, start):
             community_id=COMMUNITY_ID,
             group_id=GROUP_ID,
             document=file_path,
-            description=file_path,
             progress=upload_progress_handler,
             progress_args=(size, message, start)
         )
