@@ -42,7 +42,7 @@ def server_select(file_size: int,Photo=None):
                 callback_data=f"{prefix}fileio"
             )
         ])
-    if Photo:
+    if Flase:
                 upload_selection.append([
                     InlineKeyboardButton(
                         "Telegraph",
